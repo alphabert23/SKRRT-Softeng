@@ -1,4 +1,6 @@
 //import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,9 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpController extends State<SignUpView> {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   TextEditingController fname = TextEditingController();
   TextEditingController lname = TextEditingController();
   TextEditingController idno = TextEditingController();
@@ -46,30 +51,55 @@ class _SignUpController extends State<SignUpView> {
 
  void createNewUser() async {
    //print("YES1");
-   var url = "http://192.168.1.12/skrrt/register.php";  //localhost, change 192.168.1.9 to ur own localhost
-   var data = {
-           "firstName": fname.text,
-           "lastName": lname.text,
-           "idNo": idno.text,
-           "status": status,
-           "username": username.text,
-           "password": pass.text,
-           "phoneNo": phone.text,
-           "dateOfBirth": dateCtl.text,
-           "course": drop1value,
-           "year": drop2value,
-           "dept": drop2value,
-           "college": drop1value,
-         };
-   //print("YES2");
-   var res = await http.post(url,body: data);
-   //print("YES3");
-   if(jsonDecode(res.body) == "okay"){
-     print("YESSSSSSS");
-   }
-   else{
-     print("NOOOOOO");
-   }
+  //  var url = "http://192.168.1.12/skrrt/register.php";  //localhost, change 192.168.1.9 to ur own localhost
+  //  var data = {
+  //          "firstName": fname.text,
+  //          "lastName": lname.text,
+  //          "idNo": idno.text,
+  //          "status": status,
+  //          "username": username.text,
+  //          "password": pass.text,
+  //          "phoneNo": phone.text,
+  //          "dateOfBirth": dateCtl.text,
+  //          "course": drop1value,
+  //          "year": drop2value,
+  //          "dept": drop2value,
+  //          "college": drop1value,
+  //        };
+  //  //print("YES2");
+  //  var res = await http.post(url,body: data);
+  //  //print("YES3");
+  //  if(jsonDecode(res.body) == "okay"){
+  //    print("YESSSSSSS");
+  //  }
+  //  else{
+  //    print("NOOOOOO");
+  //  }
+
+    final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+      email: fname.text +'.' + lname.text + '@cit.edu',
+      password: pass.text,
+    ))
+        .user;
+    
+    if(user != null){
+     DatabaseReference newUserRef = FirebaseDatabase.instance.reference().child('users/${user.uid}');
+
+      Map userMap = {
+        'firstName': fname.text,
+        'lastName': lname.text,
+        'idNo': idno.text,
+        'status': status,
+        'username': username.text,
+        'phoneNo': phone.text,
+        'dateOfBirth': dateCtl.text,
+        'course': drop1value,
+        'year': drop2value,
+        'dept': drop2value,
+        'college': drop1value,
+      };
+      newUserRef.set(userMap);
+    }
 
   }
 
