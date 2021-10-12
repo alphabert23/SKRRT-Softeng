@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,22 +40,34 @@ class _NavigationState extends State<Navigation> {
     await session.set("time", _stopwatch.elapsed.inMinutes);
   }
   void save() async {
+    
     rideID = await session.get("rideID");
-    var url = "http://192.168.1.12/skrrt/rideFinish.php";
-    var data = { // save duration in secs, distance & destination
-      "rideID": rideID.toString(),
-      "endLocation": endLocation.toString(),
-      "distance": distanceTravelled.toString(),
-      "rideDuration": _stopwatch.elapsed.inSeconds.toString()
+    DatabaseReference newRideRef = FirebaseDatabase.instance.reference().child('rides/').push();
+
+    Map rideMap = {
+      'rideID': rideID.toString(),
+      'endLocation': endLocation.toString(),
+      'distance': distanceTravelled.toString(),
+      'rideDuration': _stopwatch.elapsed.inSeconds.toString()
     };
-    print(data);
-    var res = await http.post(url,body: data);
-    if(jsonDecode(res.body) == "Success"){
-      print("Success");
-    }
-    else{
-      print("Failed");
-    }
+    newRideRef.set(rideMap);
+
+    // rideID = await session.get("rideID");
+    // var url = "http://192.168.1.12/skrrt/rideFinish.php";
+    // var data = { // save duration in secs, distance & destination
+    //   "rideID": rideID.toString(),
+    //   "endLocation": endLocation.toString(),
+    //   "distance": distanceTravelled.toString(),
+    //   "rideDuration": _stopwatch.elapsed.inSeconds.toString()
+    // };
+    // print(data);
+    // var res = await http.post(url,body: data);
+    // if(jsonDecode(res.body) == "Success"){
+    //   print("Success");
+    // }
+    // else{
+    //   print("Failed");
+    // }
   }
 
   static final CameraPosition _cameraPosition = CameraPosition(
