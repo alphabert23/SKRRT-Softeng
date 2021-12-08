@@ -753,12 +753,12 @@ class _SignUpController extends State<SignUpView> {
                         textInputAction: TextInputAction.next,
                         validator: (email) {
                           Pattern pattern =
-                              r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
                           RegExp regex = new RegExp(pattern);
                           if (email.isEmpty) {
                             return 'email is required.';
-                          } else if (regex.hasMatch(email))
-                            return 'Already Used Email.';
+                          } else if (!regex.hasMatch(email))
+                            return 'Invalid Email.';
                           else
                             return null;
                         },
