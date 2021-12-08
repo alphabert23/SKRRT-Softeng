@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:skrrt_app/widgets/ProgressDialog.dart';
 import 'package:skrrt_app/widgets/utils.dart';
 
 //import 'package:http/http.dart' as http;
@@ -53,6 +54,7 @@ class _SignUpController extends State<SignUpView> {
   TextEditingController lname = TextEditingController();
   TextEditingController idno = TextEditingController();
   TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
   TextEditingController cam = TextEditingController();
@@ -92,15 +94,16 @@ class _SignUpController extends State<SignUpView> {
     //    print("NOOOOOO");
     //  }
 
+    /* showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => ProgressDialog(status: 'Registering you..',),
+    ); */
+    
     final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
-      email: fname.text + '.' + lname.text + '@cit.edu',
+      email: email.text,
       password: pass.text,
-    )
-        //         .catchError((ex) {
-        //   PlatformException thisEx = ex;
-        //   showSnackbar(thisEx.message);
-        // })
-        )
+    ))
         .user;
 
     if (user != null) {
@@ -113,6 +116,7 @@ class _SignUpController extends State<SignUpView> {
         'idNo': idno.text,
         'status': status,
         'username': username.text,
+        'email': email.text,
         'phoneNo': phone.text,
         'dateOfBirth': dateCtl.text,
         'course': drop1value,
@@ -388,7 +392,9 @@ class _SignUpController extends State<SignUpView> {
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Last Name is required.';
-                          } else if (!RegExp('^[A-Za-z]+\$').hasMatch(value)) {
+                          } else if (!RegExp(
+                                  '(^[A-Za-z]*)([\\s\\\'-][A-Za-z]*)*\$')
+                              .hasMatch(value)) {
                             return 'Invalid Last Name.';
                           } else
                             return null;
@@ -742,6 +748,41 @@ class _SignUpController extends State<SignUpView> {
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.01),
+                          TextFormField(
+                        controller: email,
+                        textInputAction: TextInputAction.next,
+                        validator: (email) {
+                          Pattern pattern =
+                              r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+                          RegExp regex = new RegExp(pattern);
+                          if (email.isEmpty) {
+                            return 'email is required.';
+                          } else if (regex.hasMatch(email))
+                            return 'Already Used Email.';
+                          else
+                            return null;
+                        },
+                        onSaved: (email) => email = email,
+                        decoration: InputDecoration(
+                            hintText: 'Email',
+                            hintStyle: TextStyle(
+                              fontFamily: 'Quicksand',
+                              fontSize: 16.0,
+                            ),
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.only(right: 15),
+                              child: Icon(
+                                Icons.email_outlined,
+                                color: Color.fromARGB(255, 0x00, 0xA8, 0xE5),
+                                size: 15,
+                              ),
+                            )),
+                        style: TextStyle(
+                          fontFamily: 'Quicksand',
+                          fontSize: 16.0,
+                          color: Color.fromARGB(255, 0x00, 0xA8, 0xE5),
+                        ),
+                      ),
                       TextFormField(
                         controller: username,
                         textInputAction: TextInputAction.next,
