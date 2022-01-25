@@ -1,20 +1,14 @@
-//import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart' as tst;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:overlay_support/overlay_support.dart';
-import 'package:skrrt_app/widgets/ProgressDialog.dart';
+//import 'package:overlay_support/overlay_support.dart';
+//import 'package:skrrt_app/widgets/ProgressDialog.dart';
 import 'package:skrrt_app/widgets/utils.dart';
-
-//import 'package:http/http.dart' as http;
 import 'dart:async';
-//import 'dart:convert';
 
 import 'package:telephony/telephony.dart';
 import 'dart:math';
@@ -181,7 +175,7 @@ class _SignUpController extends State<SignUpView> {
         msg: message,
         toastLength: tst.Toast.LENGTH_SHORT,
         gravity: tst.ToastGravity.TOP,
-        timeInSecForIos: 1,
+        timeInSecForIosWeb: 1,
         fontSize: 16.0);
   }
 
@@ -1017,8 +1011,8 @@ class _SignUpController extends State<SignUpView> {
         data: ThemeData(
           canvasColor: Colors.white,
           shadowColor: Colors.transparent,
-          primaryColor: Color.fromARGB(255, 0x00, 0xA8, 0xE5),
-          accentColor: Color.fromARGB(255, 0xE1, 0xDE, 0xDE),
+          primaryColor: Color.fromARGB(255, 0x00, 0xA8, 0xE5), 
+          colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color.fromARGB(255, 0xE1, 0xDE, 0xDE)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -1133,8 +1127,7 @@ class _SignUpController extends State<SignUpView> {
                       onStepCancel: cancel,
                       onStepTapped: (step) => goTo(step),
                       controlsBuilder: (BuildContext context,
-                          {VoidCallback onStepContinue,
-                          VoidCallback onStepCancel}) {
+                         ControlsDetails controls) {
                         return Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal:
