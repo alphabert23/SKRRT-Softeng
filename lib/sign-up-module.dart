@@ -1,4 +1,4 @@
-//import 'dart:io';
+/* //import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart' as tst;
@@ -43,7 +43,7 @@ class _SignUpController extends State<SignUpView> {
   TextEditingController phone = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
   TextEditingController cam = TextEditingController();
-  TextEditingController pass = TextEditingController();
+  TextEditingController pass = TextEditingController(); 
 
   TextEditingController pin = TextEditingController();
 
@@ -1158,3 +1158,4 @@ class _SignUpController extends State<SignUpView> {
     );
   }
 }
+ */
