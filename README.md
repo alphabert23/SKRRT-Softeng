@@ -1,6 +1,11 @@
 # skrrt_app
 
-SKRRT is a scooter rental service app prototype for Software Engineering 2.
+SKRRT is a scooter rental service app prototype for Software Engineering 2. The app allows you to book a (virtual) scooter to ride around CIT-U and pay using SKRRT Wallet.
+
+App features:
+  - Scooter booking page
+  - Navigation Page
+  - SKRRT Wallet Page
 
 ## Getting Started
 
